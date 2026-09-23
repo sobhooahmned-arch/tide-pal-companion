@@ -155,14 +155,22 @@ function AdminPage() {
                     </button>
                   </div>
                 </div>
+                {r.fromNumber && (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    الرقم الذي تم التحويل منه:{" "}
+                    <span className="font-bold tabular-nums text-foreground" dir="ltr">
+                      {r.fromNumber}
+                    </span>
+                  </p>
+                )}
                 {r.proof && (
                   <details className="mt-3">
                     <summary className="cursor-pointer text-xs font-bold text-primary">
-                      عرض إثبات التحويل
+                      عرض صورة التحويل
                     </summary>
                     <img
                       src={r.proof}
-                      alt="إثبات التحويل"
+                      alt="صورة التحويل"
                       className="mt-2 max-h-72 w-full rounded-xl object-contain"
                     />
                   </details>

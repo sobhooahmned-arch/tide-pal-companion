@@ -82,8 +82,8 @@ function WithdrawPage() {
   const tax = sub ? sub.tax || PACKAGE_TAX[sub.amount] || 0 : 0;
 
   function submitTax() {
-    if (senderNumber.trim().length < 8) return setError("اكتب رقم التحويل صح.");
-    if (!proofName) return setError("أضف إثبات التحويل.");
+    if (!/^\d{11}$/.test(senderNumber.trim())) return setError("اكتب الرقم الذي تم التحويل منه (11 رقم).");
+    if (!proofName) return setError("أضف صورة التحويل.");
     setError(null);
     submitTaxProof({ identifier: user!.identifier, senderNumber: senderNumber.trim(), proofName });
     setSub(getSubscription(user!.identifier));
@@ -91,7 +91,7 @@ function WithdrawPage() {
   }
 
   function submitWithdraw() {
-    if (receiveNumber.trim().length < 8) return setError("اكتب رقم الاستلام صح.");
+    if (!/^\d{11}$/.test(receiveNumber.trim())) return setError("اكتب رقم الاستلام (11 رقم).");
     if (!amount || amount <= 0) return setError("اكتب مبلغاً صحيحاً.");
     if (amount > balance) return setError("المبلغ أكبر من رصيدك.");
     setError(null);
@@ -177,14 +177,15 @@ function WithdrawPage() {
             </label>
             <input
               value={senderNumber}
-              onChange={(e) => setSenderNumber(e.target.value.replace(/[^\d+]/g, ""))}
+              onChange={(e) => setSenderNumber(e.target.value.replace(/\D/g, "").slice(0, 11))}
               inputMode="tel"
+              maxLength={11}
               dir="ltr"
               placeholder="01xxxxxxxxx"
               className="mt-1 w-full rounded-xl border border-input bg-background/60 px-3 py-3 outline-none focus:border-primary"
             />
 
-            <label className="mt-4 block text-xs text-muted-foreground">3- إثبات التحويل</label>
+            <label className="mt-4 block text-xs text-muted-foreground">3- صورة التحويل</label>
             <input
               type="file"
               accept="image/*"
@@ -237,8 +238,9 @@ function WithdrawPage() {
             </label>
             <input
               value={receiveNumber}
-              onChange={(e) => setReceiveNumber(e.target.value.replace(/[^\d+]/g, ""))}
+              onChange={(e) => setReceiveNumber(e.target.value.replace(/\D/g, "").slice(0, 11))}
               inputMode="tel"
+              maxLength={11}
               dir="ltr"
               placeholder="01xxxxxxxxx"
               className="mt-1 w-full rounded-xl border border-input bg-background/60 px-3 py-3 outline-none focus:border-primary"

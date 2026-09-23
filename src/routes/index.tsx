@@ -190,7 +190,7 @@ function LoginPanel({ onDone }: { onDone: (user: StoredUser) => void }) {
     if (method === "email" && !emailPattern.test(v))
       return setError("البريد الإلكتروني غير صحيح.");
     if (method === "phone" && !phonePattern.test(v.replace(/\s/g, "")))
-      return setError("رقم الموبايل غير صحيح.");
+      return setError("رقم الموبايل لازم يكون 11 رقم.");
     if (password.length < 4) return setError("كلمة المرور 4 أحرف على الأقل.");
 
     if (mode === "signup") {
@@ -259,10 +259,15 @@ function LoginPanel({ onDone }: { onDone: (user: StoredUser) => void }) {
       </label>
       <input
         value={value}
-        onChange={(e) => setValue(e.target.value)}
+        onChange={(e) =>
+          setValue(
+            method === "phone" ? e.target.value.replace(/\D/g, "").slice(0, 11) : e.target.value,
+          )
+        }
         inputMode={method === "phone" ? "tel" : "email"}
+        {...(method === "phone" ? { maxLength: 11 } : {})}
         dir="ltr"
-        placeholder={method === "email" ? "name@mail.com" : "+201234567890"}
+        placeholder={method === "email" ? "name@mail.com" : "01xxxxxxxxx"}
         className="mt-1 w-full rounded-xl border border-input bg-background/60 px-3 py-3 text-sm outline-none focus:border-primary"
       />
 

@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { SupportButton } from "@/components/SupportButton";
 import { RequestsButton } from "@/components/RequestsButton";
+import { NotificationToasts } from "@/components/NotificationToasts";
+import { useNotifications } from "@/hooks/use-notifications";
 import { clearStoredUser, getStoredUser, type StoredUser } from "@/lib/auth";
 import { createStocks, fmt, tick, toPath, type Stock } from "@/lib/market";
 import { getBalance } from "@/lib/store";

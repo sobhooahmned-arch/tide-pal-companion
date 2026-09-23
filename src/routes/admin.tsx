@@ -199,6 +199,13 @@ function AdminPage() {
                 account={a}
                 onChange={(delta) => {
                   updateBalance(a.identifier, delta);
+                  if (delta > 0) {
+                    pushNotification({
+                      identifier: a.identifier,
+                      title: "تم إضافة رصيد",
+                      text: `تم إضافة ${fmt(delta)} ج.م إلى محفظتك 🎉`,
+                    });
+                  }
                   refresh();
                   flash(
                     delta >= 0

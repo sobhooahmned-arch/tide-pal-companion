@@ -225,6 +225,7 @@ function MarketPage() {
 
       </div>
       <SupportButton />
+      <NotificationToasts items={toasts} onDismiss={dismiss} />
     </main>
   );
 }

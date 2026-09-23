@@ -53,6 +53,7 @@ function MarketPage() {
   const [notice, setNotice] = useState<string | null>(null);
   const [sub, setSub] = useState<Subscription | null>(null);
   const [now, setNow] = useState(() => Date.now());
+  const { toasts, dismiss } = useNotifications(user?.identifier ?? null);
 
   useEffect(() => {
     const u = getStoredUser();

@@ -364,6 +364,7 @@ function DepositPage() {
           placeholder="0.00"
           className="mt-3 w-full rounded-2xl border border-input bg-background/60 px-4 py-4 text-xl outline-none focus:border-primary"
         />
+        <p className="mt-2 text-xs text-muted-foreground">الحد الأدنى للإيداع 300 ج.م.</p>
         <div className="mt-3 flex gap-2">
           {[500, 1000, 5000].map((v) => (
             <button

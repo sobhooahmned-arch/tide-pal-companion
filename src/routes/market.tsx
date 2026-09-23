@@ -212,10 +212,23 @@ function MarketPage() {
         )}
 
 
-        <h2 className="mt-7 text-lg font-bold">حركة الأسهم المباشرة</h2>
-        <p className="text-sm text-muted-foreground">
-          أسعار تجريبية تتحدث تلقائياً كل ثانية تقريباً.
-        </p>
+        <div className="mt-7 flex items-end justify-between gap-3">
+          <div>
+            <h2 className="flex items-center gap-2 text-lg font-bold">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+              </span>
+              حركة الأسهم المباشرة
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              أسعار تجريبية تتحدث تلقائياً كل ثانية تقريباً.
+            </p>
+          </div>
+          <span className="rounded-full border border-border bg-card/60 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-muted-foreground backdrop-blur-sm">
+            مباشر
+          </span>
+        </div>
 
         <section className="mt-3 space-y-2">
           {stocks.map((s) => (

@@ -44,6 +44,7 @@ function SupportPage() {
   const [msgs, setMsgs] = useState<SupportMessage[]>([]);
   const [text, setText] = useState("");
   const endRef = useRef<HTMLDivElement | null>(null);
+  const { toasts, dismiss } = useNotifications(user?.identifier ?? null);
 
   useEffect(() => {
     const u = getStoredUser();

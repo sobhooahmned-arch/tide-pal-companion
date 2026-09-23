@@ -151,6 +151,7 @@ function DepositPage() {
   function submit() {
     const value = Number(amount);
     if (!value || value <= 0) return setError("اكتب المبلغ الذي حوّلته.");
+    if (value < 300) return setError("الحد الأدنى للإيداع 300 ج.م.");
     if (value > 1_000_000) return setError("المبلغ أكبر من الحد المسموح.");
     if (!proof) return setError("أرفق صورة التحويل أولاً.");
     if (!/^\d{11}$/.test(fromNumber)) return setError("اكتب الرقم الذي تم التحويل منه (11 رقم).");
@@ -363,6 +364,7 @@ function DepositPage() {
           placeholder="0.00"
           className="mt-3 w-full rounded-2xl border border-input bg-background/60 px-4 py-4 text-xl outline-none focus:border-primary"
         />
+        <p className="mt-2 text-xs text-muted-foreground">الحد الأدنى للإيداع 300 ج.م.</p>
         <div className="mt-3 flex gap-2">
           {[500, 1000, 5000].map((v) => (
             <button

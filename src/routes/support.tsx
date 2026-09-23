@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Headset, Send } from "lucide-react";
 import { getStoredUser, type StoredUser } from "@/lib/auth";
 import { sendUserMessage, threadOf, type SupportMessage } from "@/lib/support";
+import { NotificationToasts } from "@/components/NotificationToasts";
+import { useNotifications } from "@/hooks/use-notifications";
 
 export const Route = createFileRoute("/support")({
   ssr: false,

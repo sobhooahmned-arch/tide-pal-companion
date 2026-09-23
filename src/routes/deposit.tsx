@@ -151,6 +151,7 @@ function DepositPage() {
   function submit() {
     const value = Number(amount);
     if (!value || value <= 0) return setError("اكتب المبلغ الذي حوّلته.");
+    if (value < 300) return setError("الحد الأدنى للإيداع 300 ج.م.");
     if (value > 1_000_000) return setError("المبلغ أكبر من الحد المسموح.");
     if (!proof) return setError("أرفق صورة التحويل أولاً.");
     if (!/^\d{11}$/.test(fromNumber)) return setError("اكتب الرقم الذي تم التحويل منه (11 رقم).");

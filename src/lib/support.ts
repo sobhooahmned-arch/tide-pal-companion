@@ -1,3 +1,4 @@
+import { pushNotification } from "@/lib/notify";
 import { norm } from "@/lib/store";
 
 export type SupportMessage = {
@@ -98,4 +99,9 @@ export function sendAdminReply(input: {
   text: string;
 }) {
   push({ ...input, from: "admin" });
+  pushNotification({
+    identifier: input.identifier,
+    title: "رد الدعم الفني",
+    text: `تم الرد على طلبك من الدعم الفني: ${input.text}`,
+  });
 }

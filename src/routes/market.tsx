@@ -272,39 +272,64 @@ function StockRow({ stock }: { stock: Stock }) {
   const prev = useRef(stock.price);
   const flash = stock.price > prev.current ? "up" : stock.price < prev.current ? "down" : null;
   prev.current = stock.price;
+  const initials = stock.symbol.slice(0, 2);
+  const chip = up
+    ? "border-primary/30 bg-primary/10 text-primary"
+    : "border-destructive/30 bg-destructive/10 text-destructive";
+  const hoverBorder = up ? "hover:border-primary/40" : "hover:border-destructive/40";
+  const pill = up
+    ? "bg-primary/10 text-primary"
+    : "bg-destructive/10 text-destructive";
 
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
-      <div className="min-w-24 flex-1">
-        <p className="font-bold">{stock.name}</p>
-        <p className="text-xs text-muted-foreground" dir="ltr">
-          {stock.symbol}
-        </p>
+    <div
+      className={`group flex items-center justify-between gap-3 rounded-2xl border border-border bg-card/60 p-3 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-card/80 hover:shadow-lg ${hoverBorder}`}
+    >
+      <div className="flex min-w-0 flex-1 items-center gap-3">
+        <div
+          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border font-mono text-xs font-bold italic ${chip}`}
+        >
+          {initials}
+        </div>
+        <div className="min-w-0">
+          <p className="truncate font-semibold leading-tight">{stock.name}</p>
+          <p
+            className="font-mono text-[10px] tracking-widest text-muted-foreground"
+            dir="ltr"
+          >
+            {stock.symbol}
+          </p>
+        </div>
       </div>
-      <svg viewBox="0 0 120 36" className="h-9 w-28 shrink-0" preserveAspectRatio="none">
+
+      <svg
+        viewBox="0 0 120 36"
+        className="h-8 w-24 shrink-0"
+        preserveAspectRatio="none"
+      >
         <path
           d={toPath(stock.history, 120, 36)}
           fill="none"
-          strokeWidth="2"
-          className={up ? "stroke-primary" : "stroke-destructive"}
+          strokeWidth="2.5"
           strokeLinecap="round"
+          strokeLinejoin="round"
+          className={up ? "stroke-primary" : "stroke-destructive"}
         />
       </svg>
-      <div className="min-w-24 text-left">
+
+      <div className="flex shrink-0 flex-col items-end text-left" dir="ltr">
         <p
           className={`font-bold tabular-nums transition-colors duration-300 ${
             flash === "up" ? "text-primary" : flash === "down" ? "text-destructive" : ""
           }`}
-          dir="ltr"
         >
           {fmt(stock.price)}
         </p>
-        <p
-          className={`text-xs tabular-nums ${up ? "text-primary" : "text-destructive"}`}
-          dir="ltr"
+        <span
+          className={`mt-0.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold tabular-nums ${pill}`}
         >
           {up ? "▲" : "▼"} {fmt(Math.abs(stock.change))}%
-        </p>
+        </span>
       </div>
     </div>
   );

@@ -151,6 +151,7 @@ function SupportPage() {
           </button>
         </div>
       </form>
+      <NotificationToasts items={toasts} onDismiss={dismiss} />
     </main>
   );
 }

@@ -23,12 +23,12 @@ export const Route = createFileRoute("/deposit")({
       {
         name: "description",
         content:
-          "حوّل المبلغ على أرقام أورنج كاش، أرفق إثبات التحويل، واكتب المبلغ لإتمام طلب الإيداع.",
+          "حوّل المبلغ على أرقام أورنج كاش، أرفق صورة التحويل، واكتب الرقم الذي تم التحويل منه والمبلغ.",
       },
       { property: "og:title", content: "إيداع رصيد | Easy Money" },
       {
         property: "og:description",
-        content: "أرقام أورنج كاش للتحويل، إرفاق إثبات التحويل، وتأكيد طلب الإيداع.",
+        content: "أرقام أورنج كاش للتحويل، إرفاق صورة التحويل، وتأكيد طلب الإيداع.",
       },
     ],
   }),
@@ -68,6 +68,7 @@ function DepositPage() {
   const [reqs, setReqs] = useState<MoneyRequest[]>([]);
   const [amount, setAmount] = useState("");
   const [proof, setProof] = useState<{ dataUrl: string; name: string } | null>(null);
+  const [fromNumber, setFromNumber] = useState("");
   const [copied, setCopied] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [view, setView] = useState<"form" | "pending" | "banned">("form");
@@ -151,7 +152,8 @@ function DepositPage() {
     const value = Number(amount);
     if (!value || value <= 0) return setError("اكتب المبلغ الذي حوّلته.");
     if (value > 1_000_000) return setError("المبلغ أكبر من الحد المسموح.");
-    if (!proof) return setError("أرفق صورة إثبات التحويل أولاً.");
+    if (!proof) return setError("أرفق صورة التحويل أولاً.");
+    if (!/^\d{11}$/.test(fromNumber)) return setError("اكتب الرقم الذي تم التحويل منه (11 رقم).");
     if (pendingDeposit(activeUser.identifier)) {
       setView("pending");
       return;
@@ -172,6 +174,7 @@ function DepositPage() {
         amount: value,
         proof: proof.dataUrl,
         proofName: proof.name,
+        fromNumber,
       });
       setReqs(userRequests(activeUser.identifier));
       setView("pending");
@@ -214,7 +217,7 @@ function DepositPage() {
 
         <div className="rounded-2xl border border-border bg-card p-5 text-center">
           <p className="text-sm text-muted-foreground">
-            حوّل المبلغ على أحد الأرقام التالية، ثم أرفق إثبات التحويل واكتب المبلغ.
+            حوّل المبلغ على أحد الأرقام التالية، ثم أرفق صورة التحويل واكتب الرقم الذي تم التحويل منه والمبلغ.
           </p>
           <p className="mt-2 text-sm">
             رصيدك الحالي: <span className="font-bold text-primary">{fmt(balance)} ج.م</span>
@@ -301,7 +304,7 @@ function DepositPage() {
           )}
         </section>
 
-        <h2 className="mt-8 text-lg font-bold">إثبات التحويل</h2>
+        <h2 className="mt-8 text-lg font-bold">صورة التحويل</h2>
         <label
           htmlFor="proof-input"
           className="mt-3 flex cursor-pointer flex-col items-center gap-2 rounded-2xl border border-dashed border-primary/50 bg-primary/5 px-4 py-6 text-center transition hover:bg-primary/10"
@@ -310,7 +313,7 @@ function DepositPage() {
             <path d="M12 16V4m0 0l-4 4m4-4l4 4" strokeLinecap="round" strokeLinejoin="round" />
             <path d="M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2" strokeLinecap="round" />
           </svg>
-          <span className="font-bold text-primary">اضغط لإضافة إثبات التحويل</span>
+          <span className="font-bold text-primary">اضغط لإضافة صورة التحويل</span>
           <span className="text-xs text-muted-foreground">صورة من صور جهازك (إيصال التحويل)</span>
           <input
             id="proof-input"
@@ -323,7 +326,7 @@ function DepositPage() {
         {proof && (
           <div className="mt-3 rounded-2xl border border-border bg-card p-3">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-sm font-bold">تم إرفاق الإثبات ✓</p>
+              <p className="text-sm font-bold">تم إرفاق صورة التحويل ✓</p>
               <button
                 onClick={() => setProof(null)}
                 className="rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground"
@@ -333,11 +336,23 @@ function DepositPage() {
             </div>
             <img
               src={proof.dataUrl}
-              alt="إثبات التحويل"
+              alt="صورة التحويل"
               className="mt-2 max-h-56 w-full rounded-xl object-contain"
             />
           </div>
         )}
+
+        <h2 className="mt-8 text-lg font-bold">الرقم الذي تم التحويل منه</h2>
+        <input
+          value={fromNumber}
+          onChange={(e) => setFromNumber(e.target.value.replace(/\D/g, "").slice(0, 11))}
+          inputMode="tel"
+          maxLength={11}
+          dir="ltr"
+          placeholder="01xxxxxxxxx"
+          className="mt-3 w-full rounded-2xl border border-input bg-background/60 px-4 py-4 text-lg tabular-nums outline-none focus:border-primary"
+        />
+        <p className="mt-2 text-xs text-muted-foreground">لازم يكون 11 رقم بالظبط.</p>
 
         <h2 className="mt-8 text-lg font-bold">المبلغ المحوّل</h2>
         <input

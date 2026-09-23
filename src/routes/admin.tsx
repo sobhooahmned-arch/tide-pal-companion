@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 import { clearStoredUser, getStoredUser } from "@/lib/auth";
 import { fmt } from "@/lib/market";
+import { pushNotification } from "@/lib/notify";
 import { getPaySettings, savePaySettings, type PaySettings } from "@/lib/settings";
 import { getThreads, sendAdminReply, type SupportThread } from "@/lib/support";
 import {
@@ -66,6 +67,13 @@ function AdminPage() {
     }
     updateBalance(req.identifier, req.kind === "deposit" ? req.amount : -req.amount);
     setRequestStatus(req.id, "approved");
+    if (req.kind === "deposit") {
+      pushNotification({
+        identifier: req.identifier,
+        title: "تم إضافة رصيد",
+        text: `تم إضافة ${fmt(req.amount)} ج.م إلى محفظتك 🎉`,
+      });
+    }
     refresh();
     flash(
       req.kind === "deposit"
@@ -191,6 +199,13 @@ function AdminPage() {
                 account={a}
                 onChange={(delta) => {
                   updateBalance(a.identifier, delta);
+                  if (delta > 0) {
+                    pushNotification({
+                      identifier: a.identifier,
+                      title: "تم إضافة رصيد",
+                      text: `تم إضافة ${fmt(delta)} ج.م إلى محفظتك 🎉`,
+                    });
+                  }
                   refresh();
                   flash(
                     delta >= 0

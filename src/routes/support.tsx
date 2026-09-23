@@ -3,6 +3,8 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Headset, Send } from "lucide-react";
 import { getStoredUser, type StoredUser } from "@/lib/auth";
 import { sendUserMessage, threadOf, type SupportMessage } from "@/lib/support";
+import { NotificationToasts } from "@/components/NotificationToasts";
+import { useNotifications } from "@/hooks/use-notifications";
 
 export const Route = createFileRoute("/support")({
   ssr: false,
@@ -42,6 +44,7 @@ function SupportPage() {
   const [msgs, setMsgs] = useState<SupportMessage[]>([]);
   const [text, setText] = useState("");
   const endRef = useRef<HTMLDivElement | null>(null);
+  const { toasts, dismiss } = useNotifications(user?.identifier ?? null);
 
   useEffect(() => {
     const u = getStoredUser();
@@ -148,6 +151,7 @@ function SupportPage() {
           </button>
         </div>
       </form>
+      <NotificationToasts items={toasts} onDismiss={dismiss} />
     </main>
   );
 }

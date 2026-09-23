@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { SupportButton } from "@/components/SupportButton";
 import { RequestsButton } from "@/components/RequestsButton";
+import { NotificationToasts } from "@/components/NotificationToasts";
+import { useNotifications } from "@/hooks/use-notifications";
 import { clearStoredUser, getStoredUser, type StoredUser } from "@/lib/auth";
 import { createStocks, fmt, tick, toPath, type Stock } from "@/lib/market";
 import { getBalance } from "@/lib/store";
@@ -51,6 +53,7 @@ function MarketPage() {
   const [notice, setNotice] = useState<string | null>(null);
   const [sub, setSub] = useState<Subscription | null>(null);
   const [now, setNow] = useState(() => Date.now());
+  const { toasts, dismiss } = useNotifications(user?.identifier ?? null);
 
   useEffect(() => {
     const u = getStoredUser();
@@ -222,6 +225,7 @@ function MarketPage() {
 
       </div>
       <SupportButton />
+      <NotificationToasts items={toasts} onDismiss={dismiss} />
     </main>
   );
 }
